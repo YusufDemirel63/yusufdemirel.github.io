@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yusuf Demirel | Bilgisayar Mühendisi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00ff88;
+            --secondary: #0066ff;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --light: #ffffff;
+            --gray: #8892b0;
+            --code-bg: #1a1a2e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Matrix Rain Background */
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+        }
+
+        .logo {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::before {
+            content: '< ';
+            opacity: 0;
+            transition: all 0.3s ease;
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: ' />';
+            opacity: 0;
+            transition: all 0.3s ease;
+            color: var(--primary);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::before,
+        .nav-links a:hover::after {
+            opacity: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 1;
+        }
+
+        .hero-greeting {
+            font-family: 'Fira Code', monospace;
+            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .hero-name {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--light), var(--gray));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.2s forwards;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.4s forwards;
+        }
+
+        .typing-text {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.2rem;
+            color: var(--primary);
+            border-right: 2px solid var(--primary);
+            white-space: nowrap;
+            overflow: hidden;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { border-color: var(--primary); }
+            50% { border-color: transparent; }
+        }
+
+        .hero-description {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 540px;
+            margin: 1.5rem 0 2rem;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.6s forwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.8s forwards;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--dark);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--primary);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-secondary {
+            border: 2px solid var(--gray);
+            color: var(--gray);
+            background: transparent;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+            box-shadow: 0 0 30px rgba(0, 102, 255, 0.3);
+        }
+
+        /* Code Window Decoration */
+        .code-window {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 500px;
+            background: var(--code-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            animation: fadeInRight 0.8s ease 1s forwards;
+        }
+
+        .code-header {
+            background: #16162a;
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #ff5f56; }
+        .code-dot.yellow { background: #ffbd2e; }
+        .code-dot.green { background: #27ca40; }
+
+        .code-title {
+            margin-left: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .code-body {
+            padding: 1.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+        .code-line {
+            display: flex;
+        }
+
+        .line-number {
+            color: #4a5568;
+            min-width: 30px;
+            user-select: none;
+        }
+
+        .code-keyword { color: #c792ea; }
+        .code-function { color: #82aaff; }
+        .code-string { color: #c3e88d; }
+        .code-variable { color: #f07178; }
+        .code-comment { color: #546e7a; }
+        .code-bracket { color: #89ddff; }
+
+        /* Section Styles */
+        section {
+            padding: 100px 10%;
+            position: relative;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-number {
+            font-family: 'Fira Code', monospace;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-right: 1rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .section-line {
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--gray), transparent);
+            margin-left: 2rem;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text p span {
+            color: var(--primary);
+        }
+
+        .skills-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+
+        .skill-item::before {
+            content: '▹';
+            color: var(--primary);
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 10px;
+            filter: grayscale(100%);
+            transition: all 0.3s ease;
+        }
+
+        .about-image:hover img {
+            filter: grayscale(0%);
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: -20px;
+            bottom: -20px;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        .about-image:hover::before {
+            top: 15px;
+            left: 15px;
+        }
+
+        /* Experience Section */
+        .experience-container {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .experience-tabs {
+            display: flex;
+            flex-direction: column;
+            min-width: 200px;
+            border-left: 2px solid rgba(136, 146, 176, 0.2);
+        }
+
+        .exp-tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .exp-tab::before {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: var(--primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .exp-tab:hover,
+        .exp-tab.active {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+        }
+
+        .exp-tab.active::before {
+            transform: scaleY(1);
+        }
+
+        .experience-content {
+            flex-grow: 1;
+        }
+
+        .exp-panel {
+            display: none;
+        }
+
+        .exp-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .exp-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .exp-title span {
+            color: var(--primary);
+        }
+
+        .exp-date {
+            font-family: 'Fira Code', monospace;
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .exp-list {
+            list-style: none;
+        }
+
+        .exp-list li {
+            color: var(--gray);
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .exp-list li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, var(--code-bg), var(--darker));
+            border-radius: 10px;
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 255, 136, 0.1);
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.1);
+        }
+
+        .project-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .project-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+            transition: color 0.3s ease;
+        }
+
+        .project-card:hover .project-title {
+            color: var(--primary);
+        }
+
+        .project-description {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-tag {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--primary);
+            background: rgba(0, 255, 136, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-links a {
+            color: var(--gray);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .project-links a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Contact Section */
+        .contact-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-content h3 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-content p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .social-links a {
+            color: var(--gray);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translate(50px, -50%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(0, -50%);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Scroll Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Glitch Effect */
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            animation: glitch-1 2s infinite linear alternate-reverse;
+            clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background: linear-gradient(135deg, var(--light), var(--gray));
+            background-clip: text;
+        }
+
+        .glitch::after {
+            animation: glitch-2 3s infinite linear alternate-reverse;
+            clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background: linear-gradient(135deg, var(--light), var(--gray));
+            background-clip: text;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(2px, -2px); }
+            40% { transform: translate(2px, 2px); }
+            60% { transform: translate(-2px, -2px); }
+            80% { transform: translate(-2px, 2px); }
+        }
+
+        /* Floating Animation */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Mobile Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 2px;
+            background: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .code-window {
+                display: none;
+            }
+
+            .hero {
+                padding: 0 5%;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .about-image {
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .experience-container {
+                flex-direction: column;
+            }
+
+            .experience-tabs {
+                flex-direction: row;
+                overflow-x: auto;
+                border-left: none;
+                border-bottom: 2px solid rgba(136, 146, 176, 0.2);
+            }
+
+            .exp-tab::before {
+                top: auto;
+                bottom: -2px;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                transform: scaleX(0);
+            }
+
+            .exp-tab.active::before {
+                transform: scaleX(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background: var(--darker);
+                transition: right 0.3s ease;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .hero-name {
+                font-size: 2.5rem;
+            }
+
+            .hero-title {
+                font-size: 1.5rem;
+            }
+
+            section {
+                padding: 60px 5%;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Terminal Cursor */
+        .terminal-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: var(--primary);
+            animation: blink 1s infinite;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        /* Particle Background */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix Rain Background -->
+    <canvas id="matrix-bg"></canvas>
+
+    <!-- Particles -->
+    <div id="particles"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">&lt;<span>YD</span>/&gt;</a>
+        <ul class="nav-links">
+            <li><a href="#about">Hakkımda</a></li>
+            <li><a href="#experience">Deneyim</a></li>
+            <li><a href="#projects">Projeler</a></li>
+            <li><a href="#contact">İletişim</a></li>
+        </ul>
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <p class="hero-greeting">// Merhaba, ben</p>
+            <h1 class="hero-name glitch" data-text="Yusuf Demirel">Yusuf Demirel</h1>
+            <h2 class="hero-title">Bilgisayar Mühendisi</h2>
+            <div class="typing-container">
+                <span class="typing-text" id="typing"></span>
+            </div>
+            <p class="hero-description">
+                Yazılım geliştirme, algoritma tasarımı ve problem çözme konularında tutkulu bir bilgisayar mühendisliği öğrencisiyim. 
+                Modern teknolojilerle yenilikçi çözümler üretmeyi seviyorum.
+            </p>
+            <div class="hero-buttons">
+                <a href="#projects" class="btn btn-primary">&lt;Projelerim/&gt;</a>
+                <a href="#contact" class="btn btn-secondary">İletişim</a>
+            </div>
+        </div>
+
+        <!-- Code Window -->
+        <div class="code-window floating">
+            <div class="code-header">
+                <div class="code-dot red"></div>
+                <div class="code-dot yellow"></div>
+                <div class="code-dot green"></div>
+                <span class="code-title">yusuf.js</span>
+            </div>
+            <div class="code-body">
+                <div class="code-line">
+                    <span class="line-number">1</span>
+                    <span><span class="code-keyword">const</span> <span class="code-variable">developer</span> <span class="code-bracket">=</span> <span class="code-bracket">{</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">2</span>
+                    <span>&nbsp;&nbsp;name: <span class="code-string">"Yusuf Demirel"</span>,</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">3</span>
+                    <span>&nbsp;&nbsp;title: <span class="code-string">"CS Student"</span>,</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">4</span>
+                    <span>&nbsp;&nbsp;skills: <span class="code-bracket">[</span><span class="code-string">"Python"</span>, <span class="code-string">"Java"</span>, <span class="code-string">"C++"</span><span class="code-bracket">]</span>,</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">5</span>
+                    <span>&nbsp;&nbsp;passion: <span class="code-string">"Building things"</span>,</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">6</span>
+                    <span>&nbsp;&nbsp;<span class="code-function">learn</span>: <span class="code-bracket">()</span> <span class="code-keyword">=></span> <span class="code-string">"Always!"</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">7</span>
+                    <span><span class="code-bracket">}</span>;</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">8</span>
+                    <span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">9</span>
+                    <span><span class="code-comment">// Her gün yeni bir şey öğren!</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="section-header reveal">
+            <span class="section-number">01.</span>
+            <h2 class="section-title">Hakkımda</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="about-content">
+            <div class="about-text reveal">
+                <p>
+                    Merhaba! Ben <span>Yusuf</span>, bilgisayar mühendisliği okuyan ve yazılım geliştirme 
+                    konusunda tutkulu bir öğrenciyim. Teknolojinin gücüyle hayatı kolaylaştıran 
+                    çözümler üretmeyi seviyorum.
+                </p>
+                <p>
+                    Üniversite eğitimim boyunca çeşitli programlama dilleri ve teknolojilerle 
+                    projeler geliştirdim. <span>Problem çözme</span> ve <span>algoritma tasarımı</span> 
+                    konularında kendimi sürekli geliştiriyorum.
+                </p>
+                <p>
+                    Hedefim, mezun olduktan sonra yenilikçi projeler geliştirerek 
+                    teknoloji dünyasına katkıda bulunmak ve <span>sürekli öğrenmeye</span> devam etmek.
+                </p>
+                <div class="skills-list">
+                    <div class="skill-item">Python</div>
+                    <div class="skill-item">JavaScript</div>
+                    <div class="skill-item">Java</div>
+                    <div class="skill-item">C / C++</div>
+                    <div class="skill-item">SQL</div>
+                    <div class="skill-item">HTML & CSS</div>
+                    <div class="skill-item">React</div>
+                    <div class="skill-item">Git</div>
+                </div>
+            </div>
+            <div class="about-image reveal">
+                <img src="WhatsApp Görsel 2025-11-14 saat 14.00.06_64c894e9.jpg" alt="Yusuf Demirel">
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+        <div class="section-header reveal">
+            <span class="section-number">02.</span>
+            <h2 class="section-title">Deneyim</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="experience-container reveal">
+            <div class="experience-tabs">
+                <button class="exp-tab active" data-tab="exp1">Üniversite</button>
+                <button class="exp-tab" data-tab="exp2">Staj</button>
+                <button class="exp-tab" data-tab="exp3">Freelance</button>
+                <button class="exp-tab" data-tab="exp4">Sertifikalar</button>
+            </div>
+            <div class="experience-content">
+                <div class="exp-panel active" id="exp1">
+                    <h3 class="exp-title">Bilgisayar Mühendisliği @ <span>Üniversite Adı</span></h3>
+                    <p class="exp-date">2022 - Devam Ediyor</p>
+                    <ul class="exp-list">
+                        <li>Veri yapıları ve algoritmalar üzerine kapsamlı eğitim</li>
+                        <li>Yazılım mühendisliği prensipleri ve tasarım kalıpları</li>
+                        <li>Veritabanı yönetim sistemleri ve SQL</li>
+                        <li>Nesne yönelimli programlama ile proje geliştirme</li>
+                        <li>Yapay zeka ve makine öğrenmesi temelleri</li>
+                    </ul>
+                </div>
+                <div class="exp-panel" id="exp2">
+                    <h3 class="exp-title">Yazılım Geliştirici Stajyer @ <span>Şirket Adı</span></h3>
+                    <p class="exp-date">Yaz 2024</p>
+                    <ul class="exp-list">
+                        <li>Web tabanlı uygulamalar geliştirme</li>
+                        <li>RESTful API tasarımı ve implementasyonu</li>
+                        <li>Agile/Scrum metodolojisi ile çalışma</li>
+                        <li>Kod review süreçlerine katılım</li>
+                    </ul>
+                </div>
+                <div class="exp-panel" id="exp3">
+                    <h3 class="exp-title">Freelance <span>Projeler</span></h3>
+                    <p class="exp-date">2023 - Günümüz</p>
+                    <ul class="exp-list">
+                        <li>Küçük işletmeler için web sitesi geliştirme</li>
+                        <li>Otomasyon scriptleri yazma</li>
+                        <li>Veri analizi ve görselleştirme projeleri</li>
+                        <li>Mobil uygulama geliştirme denemeleri</li>
+                    </ul>
+                </div>
+                <div class="exp-panel" id="exp4">
+                    <h3 class="exp-title">Sertifikalar & <span>Başarılar</span></h3>
+                    <p class="exp-date">2022 - Günümüz</p>
+                    <ul class="exp-list">
+                        <li>Python ile Veri Bilimi - Coursera</li>
+                        <li>Web Geliştirme Bootcamp - Udemy</li>
+                        <li>Git ve GitHub Temelleri</li>
+                        <li>Algoritma yarışmalarına katılım</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="section-header reveal">
+            <span class="section-number">03.</span>
+            <h2 class="section-title">Projeler</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="projects-grid">
+            <div class="project-card reveal">
+                <div class="project-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3 class="project-title">Yapay Zeka Chatbot</h3>
+                <p class="project-description">
+                    Doğal dil işleme teknikleri kullanarak geliştirilen akıllı sohbet botu. 
+                    Kullanıcı sorularını anlayıp anlamlı yanıtlar üretebiliyor.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">TensorFlow</span>
+                    <span class="tech-tag">NLP</span>
+                    <span class="tech-tag">Flask</span>
+                </div>
+                <div class="project-links">
+                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" title="Demo"><i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <div class="project-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h3 class="project-title">Görev Yönetim Uygulaması</h3>
+                <p class="project-description">
+                    Full-stack web uygulaması olarak geliştirilen görev yönetim sistemi. 
+                    Kullanıcılar görevlerini organize edebilir ve takip edebilir.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">React</span>
+                    <span class="tech-tag">Node.js</span>
+                    <span class="tech-tag">MongoDB</span>
+                    <span class="tech-tag">Express</span>
+                </div>
+                <div class="project-links">
+                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" title="Demo"><i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <div class="project-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="project-title">Veri Analiz Dashboard</h3>
+                <p class="project-description">
+                    İnteraktif veri görselleştirme dashboard'u. Büyük veri setlerini 
+                    analiz edip anlaşılır grafiklerle sunuyor.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Pandas</span>
+                    <span class="tech-tag">Plotly</span>
+                    <span class="tech-tag">Dash</span>
+                </div>
+                <div class="project-links">
+                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" title="Demo"><i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <div class="project-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3 class="project-title">Fitness Takip Uygulaması</h3>
+                <p class="project-description">
+                    Mobil uygulama ile egzersiz ve beslenme takibi. Kullanıcıların 
+                    sağlıklı yaşam hedeflerine ulaşmalarına yardımcı oluyor.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">React Native</span>
+                    <span class="tech-tag">Firebase</span>
+                    <span class="tech-tag">Redux</span>
+                </div>
+                <div class="project-links">
+                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" title="Demo"><i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <div class="project-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <h3 class="project-title">2D Platform Oyunu</h3>
+                <p class="project-description">
+                    Python Pygame kütüphanesi ile geliştirilen 2D platform oyunu. 
+                    Seviye tasarımı, fizik motoru ve ses efektleri içeriyor.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Pygame</span>
+                    <span class="tech-tag">OOP</span>
+                </div>
+                <div class="project-links">
+                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" title="Demo"><i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <div class="project-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3 class="project-title">Şifre Yöneticisi</h3>
+                <p class="project-description">
+                    Güvenli şifre saklama ve yönetim uygulaması. AES şifreleme ile 
+                    kullanıcı şifrelerini güvenle saklar.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">Java</span>
+                    <span class="tech-tag">JavaFX</span>
+                    <span class="tech-tag">SQLite</span>
+                    <span class="tech-tag">Cryptography</span>
+                </div>
+                <div class="project-links">
+                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" title="Demo"><i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="section-header reveal">
+            <span class="section-number">04.</span>
+            <h2 class="section-title">İletişim</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="contact-content reveal">
+            <h3>Birlikte Çalışalım!</h3>
+            <p>
+                Yeni projeler, fikirler veya işbirlikleri için her zaman açığım. 
+                Bir soru veya öneriniz mi var? Bana ulaşmaktan çekinmeyin!
+            </p>
+            <a href="mailto:yusuf@example.com" class="btn btn-primary">&lt;Mesaj Gönder/&gt;</a>
+            <div class="social-links">
+                <a href="https://github.com/yourusername" target="_blank" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://linkedin.com/in/yourusername" target="_blank" title="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://twitter.com/yourusername" target="_blank" title="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://instagram.com/yourusername" target="_blank" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            <span class="code-comment">// </span>
+            Tasarım & Geliştirme: <a href="#">Yusuf Demirel</a>
+            <span class="code-comment"> // </span>
+            2024
+        </p>
+    </footer>
+
+    <script>
+        // Matrix Rain Effect
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+        const charArray = chars.split('');
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(10, 10, 15, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00ff88';
+            ctx.font = fontSize + 'px Fira Code';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = charArray[Math.floor(Math.random() * charArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 35);
+
+        // Resize canvas
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Typing Effect
+        const typingTexts = [
+            'console.log("Kod yazıyorum...");',
+            'while(alive) { learn(); }',
+            'git commit -m "New feature"',
+            '// TODO: Dünyayı değiştir',
+            'print("Merhaba Dünya!")',
+            'npm run build-future'
+        ];
+
+        let textIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typingElement = document.getElementById('typing');
+
+        function typeText() {
+            const currentText = typingTexts[textIndex];
+            
+            if (isDeleting) {
+                typingElement.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingElement.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            if (!isDeleting && charIndex === currentText.length) {
+                setTimeout(() => isDeleting = true, 2000);
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                textIndex = (textIndex + 1) % typingTexts.length;
+            }
+
+            const typingSpeed = isDeleting ? 50 : 100;
+            setTimeout(typeText, typingSpeed);
+        }
+
+        typeText();
+
+        // Scroll Reveal Animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const revealPoint = 150;
+
+                if (elementTop < windowHeight - revealPoint) {
+                    element.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', reveal);
+        reveal();
+
+        // Experience Tabs
+        const expTabs = document.querySelectorAll('.exp-tab');
+        const expPanels = document.querySelectorAll('.exp-panel');
+
+        expTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                expTabs.forEach(t => t.classList.remove('active'));
+                expPanels.forEach(p => p.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Mobile Menu
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        createParticles();
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.padding = '0.5rem 5%';
+                nav.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5)';
+            } else {
+                nav.style.padding = '1rem 5%';
+                nav.style.boxShadow = 'none';
+            }
+        });
+
+        // Console Easter Egg
+        console.log('%c Merhaba Geliştirici! 👋', 'color: #00ff88; font-size: 20px; font-weight: bold;');
+        console.log('%c Bu sayfanın kaynak kodunu inceliyorsun demek... Harika! 🚀', 'color: #0066ff; font-size: 14px;');
+        console.log('%c İletişime geçmek istersen: yusuf@example.com', 'color: #ffffff; font-size: 12px;');
+    </script>
+</body>
+</html>
